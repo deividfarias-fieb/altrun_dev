@@ -8,10 +8,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Cloud
   - Water
   - UI
-  - 
+  - Building
   - 
   - 
   - 
@@ -40,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Back Clouds Lvl 1
+    uniqueID: 2017603161
+    locked: 0
+  - name: Back Clouds Lvl 2
+    uniqueID: 3223105947
+    locked: 0
+  - name: Back Clouds Lvl 3
+    uniqueID: 3683255779
     locked: 0
