@@ -7,10 +7,9 @@ using UnityEngine.Rendering.Universal;
 public class Player_Menu_Controller : MonoBehaviour
 {
     // Mover o player em ambas as direcoes
-    [SerializeField] private SliderJoint2D sliderPlayer; //O [SerializeField] ajuda a otimizar o jogo e cumpre a mesma função que o public
+    [SerializeField] private SliderJoint2D sliderPlayer; //O [SerializeField] ajuda a otimizar o jogo e cumpre a mesma funï¿½ï¿½o que o public
     [SerializeField] private JointMotor2D motorTranslation;
     [SerializeField] private Animator anim;
-    [SerializeField] private string lanternTag = "Lantern_Light";
 
     private bool isMovingRight = true; 
     private bool isPaused = false;
@@ -39,18 +38,17 @@ public class Player_Menu_Controller : MonoBehaviour
         Light2D lightLeft = lanternLeft.GetComponent<Light2D>();
 
 
-        while (true) // Loop infinito para o movimento contínuo
+        while (true) 
         {
-            if (!isPaused) // Só move se não estiver pausado
+            if (!isPaused) 
             {
-                // Verifica o limite e inverte a direção
                 if (sliderPlayer.limitState == JointLimitState2D.LowerLimit && isMovingRight)
                 {
                     isMovingRight = false;
                     isPaused = true; // Pausa o movimento
-                    anim.SetBool("isRight", false); // Garante que a animação anterior seja desativada
-                    anim.SetBool("isLeft", false);  // Garante que a animação anterior seja desativada
-                    anim.SetBool("isDuck", true); // Ou defina uma animação de idle/parado
+                    anim.SetBool("isRight", false); 
+                    anim.SetBool("isLeft", false);  
+                    anim.SetBool("isDuck", true); 
                     Debug.Log("Chegou no limite superior. Pausando...");
                     yield return new WaitForSeconds(2f); // Espera 2 segundos
                     lightRight.intensity = (lightRight.intensity == 6 && isPaused) ? 0 : 6;
@@ -62,62 +60,58 @@ public class Player_Menu_Controller : MonoBehaviour
                 {
                     isMovingRight = true;
                     isPaused = true; // Pausa o movimento
-                    anim.SetBool("isRight", false); // Garante que a animação anterior seja desativada
-                    anim.SetBool("isLeft", false);  // Garante que a animação anterior seja desativada
-                    anim.SetBool("isDuck", true); // Ou defina uma animação de idle/parado
+                    anim.SetBool("isRight", false); 
+                    anim.SetBool("isLeft", false);  
+                    anim.SetBool("isDuck", true); 
+                    lightLeft.intensity = (lightLeft.intensity == 6 && isPaused) ? 0 : 6;
+                    lightRight.intensity = lightRight.intensity <= 0 ? 6 : 0;
                     Debug.Log("Chegou no limite inferior. Pausando...");
                     yield return new WaitForSeconds(2f); // Espera 2 segundos
-                    lightLeft.intensity = (lightLeft.intensity == 6 && isPaused) ? 0 : 6;
                     Debug.Log("Retomando movimento para a direita.");
                     isPaused = false; // Retoma o movimento
-                    lightRight.intensity = lightRight.intensity <= 0 ? 6 : 0;
                 }
 
-                // Aplica a velocidade e animação com base na direção
                 if (isMovingRight)
                 {
                     motorTranslation.motorSpeed = -2;
                     anim.SetBool("isRight", true);
-                    anim.SetBool("isLeft", false); // Garante que a animação esquerda esteja desativada
-                    // Certifique-se de que "isDuck" seja controlado por uma lógica específica se não for constante
+                    anim.SetBool("isLeft", false); 
                     anim.SetBool("isDuck", false);
                 }
                 else
                 {
                     motorTranslation.motorSpeed = 2;
                     anim.SetBool("isLeft", true);
-                    anim.SetBool("isRight", false); // Garante que a animação direita esteja desativada
-                    // Certifique-se de que "isDuck" seja controlado por uma lógica específica se não for constante
+                    anim.SetBool("isRight", false); 
                     anim.SetBool("isDuck", false);
                 }
                 sliderPlayer.motor = motorTranslation;
             }
             yield return null; // Espera um frame antes de continuar o loop
-
-            
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enable_Play"))
+        Debug.Log("OnTriggerEnter2D chamado! Objeto colidido: " + other.gameObject.name + " (Tag: " + other.tag + ")");
+        if (other.gameObject.CompareTag("Button"))
         {
-            Debug.Log("Colisão com coletável detectada!");
+            Debug.Log("Colisao com coletavel detectada!");
             if (interactionText != null)
             {
                 interactionText.gameObject.SetActive(true);
                 //interactionText.text = "Pressione E para interagir!";
             }
-            // Opcional: Destrói o objeto colidido
+            // Opcional: Destroi o objeto colidido
             // Destroy(other.gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Enable_Play"))
+        if (other.gameObject.CompareTag("Button"))
         {
-            Debug.Log("Saiu da colisão com coletável.");
+            Debug.Log("Saiu da colisao com coletavel.");
             if (interactionText != null)
             {
                 interactionText.gameObject.SetActive(false);
