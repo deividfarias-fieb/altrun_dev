@@ -7,20 +7,24 @@ using System.Text.RegularExpressions;
 
 public class Thunder_Controller : MonoBehaviour
 {
-    // --- Configurações de Luzes ---
-    public string lightTag = "SpotLight_Menu"; // Tag das Spotlights
-    public float flashIntensity = 1.5f; // Intensidade das luzes
-    public float flashDuration = 0.25f; // Dura��o da transi��o de cada luz
-    public float delayBetweenLights = 0.125f; // Atrasa a mudan�a de cada luz
+    // --- Configuracoes de audio ---
+    public AudioClip thunderSoundClip; 
+    private AudioSource audioSource;
 
-    // --- Configurações das Sprites ---
-    public string spriteTag = "RaySprite_Menu";
+    // --- Configuracoes de Luzes ---
+    private string lightTag = "SpotLight_Menu"; // Tag das Spotlights
+    private float flashIntensity = 1.5f; // Intensidade das luzes
+    private float flashDuration = 0.50f; // Duracao da transicao de cada luz
+    private float delayBetweenLights = 0.25f; // Atrasa a mudanca de cada luz
 
-    // --- Configurações da Sequência ---
-    public float initialDelay = 3f;
-    public float sequenceCooldown = 10f;
+    // --- Configuracoes das Sprites ---
+    private string spriteTag = "RaySprite_Menu";
 
-    // --- Referências de Objetos Internos ---
+    // --- Configuracoes da Sequência ---
+    private float initialDelay = 3f;
+    private float sequenceCooldown = 10f;
+
+    // --- Referencias de Objetos Internos ---
     private Light2D[] thunderLights;
     private SpriteRenderer[] raySprites;
     private float nextSequenceTime;
@@ -28,6 +32,11 @@ public class Thunder_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource component not found on this GameObject. Thunder sound will not play.");
+        }
         // Encontra todos os objetos com a tag especificada
         GameObject[] lightObjects = GameObject.FindGameObjectsWithTag(lightTag);
         if (lightObjects.Length > 0)
@@ -44,7 +53,7 @@ public class Thunder_Controller : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Objeto com tag '{lightTag}' n�o � uma Spotlight e foi ignorado: {obj.name}");
+                    Debug.LogWarning($"Objeto com tag '{lightTag}' não é uma Spotlight e foi ignorado: {obj.name}");
                 }
             }
 
@@ -129,6 +138,20 @@ public class Thunder_Controller : MonoBehaviour
             {
                 raySprites[thunderLights.Length - 1].enabled = false;
             }
+        }
+
+        // --- NOVO: Atraso para o som do trovão e toca o som ---
+        yield return new WaitForSeconds(2f); // Espera 3 segundos após a última luz ser apagada
+
+        if (audioSource != null && thunderSoundClip != null)
+        {
+            audioSource.PlayOneShot(thunderSoundClip); // Toca o som do trovão
+            Debug.Log("Som de trovão tocado!");
+        }
+        else
+        {
+            if (audioSource == null) Debug.LogWarning("AudioSource não encontrado para tocar o som do trovão.");
+            if (thunderSoundClip == null) Debug.LogWarning("AudioClip do trovão não atribuído no Inspetor.");
         }
 
         nextSequenceTime = Time.time + sequenceCooldown;
