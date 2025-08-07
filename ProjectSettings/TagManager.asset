@@ -6,6 +6,10 @@ TagManager:
   tags:
   - SpotLight_Menu
   - RaySprite_Menu
+  - Lantern_Light
+  - Lantern_Right
+  - Lantern_Left
+  - Enable_Play
   layers:
   - Default
   - TransparentFX
