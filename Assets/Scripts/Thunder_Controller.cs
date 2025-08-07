@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using System.Text.RegularExpressions;
 
 public class Thunder_Controller : MonoBehaviour
 {
+    // --- Configura√ß√µes de Luzes ---
     public string lightTag = "SpotLight_Menu"; // Tag das Spotlights
     public float flashIntensity = 1.5f; // Intensidade das luzes
-    public float flashDuration = 0.25f; // DuraÁ„o da transiÁ„o de cada luz
-    public float delayBetweenLights = 0.125f; // Atrasa a mudanÁa de cada luz
+    public float flashDuration = 0.25f; // DuraÔøΩÔøΩo da transiÔøΩÔøΩo de cada luz
+    public float delayBetweenLights = 0.125f; // Atrasa a mudanÔøΩa de cada luz
+
+    // --- Configura√ß√µes das Sprites ---
+    public string spriteTag = "RaySprite_Menu";
+
+    // --- Configura√ß√µes da Sequ√™ncia ---
     public float initialDelay = 3f;
     public float sequenceCooldown = 10f;
 
+    // --- Refer√™ncias de Objetos Internos ---
     private Light2D[] thunderLights;
+    private SpriteRenderer[] raySprites;
     private float nextSequenceTime;
     private bool sequenceRunning = false;
     // Start is called before the first frame update
@@ -35,15 +44,47 @@ public class Thunder_Controller : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Objeto com tag '{lightTag}' n„o È uma Spotlight e foi ignorado: {obj.name}");
+                    Debug.LogWarning($"Objeto com tag '{lightTag}' nÔøΩo ÔøΩ uma Spotlight e foi ignorado: {obj.name}");
                 }
             }
 
-            thunderLights = validLights.OrderBy(l => int.Parse(System.Text.RegularExpressions.Regex.Match(l.name, @"\d+").Value)).ToArray(); // Converte a lista para array
+            thunderLights = validLights.OrderBy(l => int.Parse(Regex.Match(l.name, @"\d+").Value)).ToArray(); 
         }
         else
         {
             Debug.LogWarning($"Nenhum objeto com a tag '{lightTag}' encontrado.");
+        }
+
+        GameObject[] spriteObjects = GameObject.FindGameObjectsWithTag(spriteTag);
+        if (spriteObjects.Length > 0)
+        {
+            List<SpriteRenderer> validSprites = new List<SpriteRenderer>();
+            foreach (GameObject obj in spriteObjects)
+            {
+                SpriteRenderer currentSprite = obj.GetComponent<SpriteRenderer>();
+                if (currentSprite != null)
+                {
+                    validSprites.Add(currentSprite);
+                    currentSprite.enabled = false;
+                }
+                else
+                {
+                    Debug.LogWarning($"Objeto com tag '{spriteTag}' n√£o tem um componente SpriteRenderer e foi ignorado: {obj.name}");
+                }
+            }
+
+            raySprites = validSprites.OrderBy(s => int.Parse(Regex.Match(s.name, @"\d+").Value)).ToArray();
+
+            if (thunderLights.Length != raySprites.Length)
+            {
+                Debug.LogWarning("N√∫mero de luzes e sprites com as tags especificadas n√£o corresponde! " +
+                                 "Isso pode causar problemas na sincroniza√ß√£o. Luzes: " + thunderLights.Length +
+                                 ", Sprites: " + raySprites.Length);
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Nenhum objeto com a tag '{spriteTag}' encontrado.");
         }
 
         nextSequenceTime = Time.time + initialDelay;
@@ -64,12 +105,16 @@ public class Thunder_Controller : MonoBehaviour
         for (int i = 0; i < thunderLights.Length; i++)
         {
             Light2D currentLight = thunderLights[i];
+            SpriteRenderer currentSprite = (i < raySprites.Length) ? raySprites[i] : null;
+
             if (currentLight != null)
             {
-                StartCoroutine(FlashLight(currentLight, flashIntensity, flashDuration));
+                StartCoroutine(FlashLightSprite(currentLight, currentSprite, flashIntensity, flashDuration));
                 if (i > 0)
                 {
-                    StartCoroutine(TurnOffLight(thunderLights[i - 1], delayBetweenLights));
+                    Light2D previousLight = thunderLights[i - 1];
+                    SpriteRenderer previousSprite = (i - 1 < raySprites.Length) ? raySprites[i - 1] : null;
+                    StartCoroutine(TurnOff(previousLight, previousSprite, delayBetweenLights));
                 }
 
                 yield return new WaitForSeconds(delayBetweenLights);
@@ -80,14 +125,23 @@ public class Thunder_Controller : MonoBehaviour
         {
             yield return new WaitForSeconds(delayBetweenLights);
             thunderLights[thunderLights.Length - 1].intensity = 0f;
+            if (raySprites.Length > 0 && raySprites[thunderLights.Length - 1] != null)
+            {
+                raySprites[thunderLights.Length - 1].enabled = false;
+            }
         }
 
         nextSequenceTime = Time.time + sequenceCooldown;
         sequenceRunning = false;
     }
 
-    IEnumerator FlashLight(Light2D targetLight2D, float targetIntensity, float duration)
+    IEnumerator FlashLightSprite(Light2D targetLight2D, SpriteRenderer targetSprite, float targetIntensity, float duration)
     {
+        if (targetSprite != null)
+        {
+            targetSprite.enabled = true;
+        }
+
         float timer = 0f;
         while (timer < duration)
         {
@@ -98,12 +152,16 @@ public class Thunder_Controller : MonoBehaviour
         targetLight2D.intensity = targetIntensity;
     }
 
-    IEnumerator TurnOffLight(Light2D lightToTurnOff, float delay)
+    IEnumerator TurnOff(Light2D lightToTurnOff, SpriteRenderer spriteToHide, float delay)
     {
         yield return new WaitForSeconds(delay);
         if (lightToTurnOff != null)
         {
             lightToTurnOff.intensity = 0f;
+        }
+        if (spriteToHide != null)
+        {
+            spriteToHide.enabled = false; // Esconde o sprite
         }
     }
 

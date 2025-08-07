@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - SpotLight_Menu
+  - RaySprite_Menu
   layers:
   - Default
   - TransparentFX
@@ -42,12 +43,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Back Clouds Lvl 1
+  - name: Background
     uniqueID: 2017603161
     locked: 0
-  - name: Back Clouds Lvl 2
+  - name: Bulding_Far
     uniqueID: 3223105947
     locked: 0
-  - name: Back Clouds Lvl 3
+  - name: Bulding_Middle
     uniqueID: 3683255779
+    locked: 0
+  - name: Rain
+    uniqueID: 3693532685
+    locked: 0
+  - name: Clouds
+    uniqueID: 3879208057
+    locked: 0
+  - name: Building_Near
+    uniqueID: 587907761
+    locked: 0
+  - name: Floor
+    uniqueID: 3270552721
+    locked: 0
+  - name: Player
+    uniqueID: 406907889
     locked: 0
