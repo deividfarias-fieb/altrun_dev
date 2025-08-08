@@ -6,6 +6,10 @@ TagManager:
   tags:
   - SpotLight_Menu
   - RaySprite_Menu
+  - Lantern_Light
+  - Lantern_Right
+  - Lantern_Left
+  - Button
   - Porta
   layers:
   - Default
@@ -64,6 +68,9 @@ TagManager:
     locked: 0
   - name: Floor
     uniqueID: 3270552721
+    locked: 0
+  - name: Play_Button
+    uniqueID: 3483685683
     locked: 0
   - name: Player
     uniqueID: 406907889
