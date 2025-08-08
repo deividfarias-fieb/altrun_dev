@@ -31,6 +31,8 @@ public class Player_Menu_Controller : MonoBehaviour
     IEnumerator MovePlayer()
     {
         // FAZER EM ARRAY OBJ[0],[1]
+
+        // EM CADA LANTERNA
         GameObject lanternRight = GameObject.FindGameObjectWithTag("Lantern_Right");
         GameObject lanternLeft = GameObject.FindGameObjectWithTag("Lantern_Left");
 
@@ -73,14 +75,14 @@ public class Player_Menu_Controller : MonoBehaviour
 
                 if (isMovingRight)
                 {
-                    motorTranslation.motorSpeed = -2;
+                    motorTranslation.motorSpeed = -1.5f;
                     anim.SetBool("isRight", true);
                     anim.SetBool("isLeft", false); 
                     anim.SetBool("isDuck", false);
                 }
                 else
                 {
-                    motorTranslation.motorSpeed = 2;
+                    motorTranslation.motorSpeed = 1.5f;
                     anim.SetBool("isLeft", true);
                     anim.SetBool("isRight", false); 
                     anim.SetBool("isDuck", false);
