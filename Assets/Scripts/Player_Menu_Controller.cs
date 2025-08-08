@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -10,6 +11,8 @@ public class Player_Menu_Controller : MonoBehaviour
     [SerializeField] private SliderJoint2D sliderPlayer; //O [SerializeField] ajuda a otimizar o jogo e cumpre a mesma fun��o que o public
     [SerializeField] private JointMotor2D motorTranslation;
     [SerializeField] private Animator anim;
+    [SerializeField] private JointTranslationLimits2D newLimits = new JointTranslationLimits2D();
+    [SerializeField] private JointTranslationLimits2D oldLimits = new JointTranslationLimits2D();
 
     private bool isMovingRight = true; 
     private bool isPaused = false;
@@ -20,6 +23,7 @@ public class Player_Menu_Controller : MonoBehaviour
     void Start()
     {
         motorTranslation = sliderPlayer.motor;
+        oldLimits = sliderPlayer.limits;
         StartCoroutine(MovePlayer());
 
         if (interactionText != null)
@@ -30,63 +34,40 @@ public class Player_Menu_Controller : MonoBehaviour
 
     IEnumerator MovePlayer()
     {
-        // FAZER EM ARRAY OBJ[0],[1]
-
-        // EM CADA LANTERNA
-        GameObject lanternRight = GameObject.FindGameObjectWithTag("Lantern_Right");
-        GameObject lanternLeft = GameObject.FindGameObjectWithTag("Lantern_Left");
-
-        Light2D lightRight= lanternRight.GetComponent<Light2D>();
-        Light2D lightLeft = lanternLeft.GetComponent<Light2D>();
-
-
         while (true) 
         {
             if (!isPaused) 
             {
+                newLimits.min = 0f;
+                newLimits.max = 15f;
+
+                // Rotate Y = 0 > Running to right screen.
                 if (sliderPlayer.limitState == JointLimitState2D.LowerLimit && isMovingRight)
                 {
                     isMovingRight = false;
                     isPaused = true; // Pausa o movimento
-                    anim.SetBool("isRight", false); 
-                    anim.SetBool("isLeft", false);  
-                    anim.SetBool("isDuck", true); 
-                    Debug.Log("Chegou no limite superior. Pausando...");
+                    anim.SetBool("isRight", false);
+                    anim.SetBool("isDuck", true);
                     yield return new WaitForSeconds(2f); // Espera 2 segundos
-                    lightRight.intensity = (lightRight.intensity == 6 && isPaused) ? 0 : 6;
-                    Debug.Log("Retomando movimento para a esquerda.");
                     isPaused = false; // Retoma o movimento
-                    lightLeft.intensity = lightLeft.intensity <= 0 ? 6 : 0;
+                    transform.Rotate(0, 180, 0);
+                    sliderPlayer.limits = newLimits;
                 }
                 else if (sliderPlayer.limitState == JointLimitState2D.UpperLimit && !isMovingRight)
                 {
                     isMovingRight = true;
                     isPaused = true; // Pausa o movimento
-                    anim.SetBool("isRight", false); 
-                    anim.SetBool("isLeft", false);  
-                    anim.SetBool("isDuck", true); 
-                    lightLeft.intensity = (lightLeft.intensity == 6 && isPaused) ? 0 : 6;
-                    lightRight.intensity = lightRight.intensity <= 0 ? 6 : 0;
-                    Debug.Log("Chegou no limite inferior. Pausando...");
+                    anim.SetBool("isRight", false);
+                    anim.SetBool("isDuck", true);
+                    transform.Rotate(0, -180, 0);
+                    sliderPlayer.limits = oldLimits;
                     yield return new WaitForSeconds(2f); // Espera 2 segundos
-                    Debug.Log("Retomando movimento para a direita.");
                     isPaused = false; // Retoma o movimento
                 }
 
-                if (isMovingRight)
-                {
-                    motorTranslation.motorSpeed = -1.5f;
-                    anim.SetBool("isRight", true);
-                    anim.SetBool("isLeft", false); 
-                    anim.SetBool("isDuck", false);
-                }
-                else
-                {
-                    motorTranslation.motorSpeed = 1.5f;
-                    anim.SetBool("isLeft", true);
-                    anim.SetBool("isRight", false); 
-                    anim.SetBool("isDuck", false);
-                }
+                motorTranslation.motorSpeed = isMovingRight ? -1.5f : 1.5f;
+                anim.SetBool("isRight", true);
+                anim.SetBool("isDuck", false);
                 sliderPlayer.motor = motorTranslation;
             }
             yield return null; // Espera um frame antes de continuar o loop
