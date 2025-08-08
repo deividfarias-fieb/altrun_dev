@@ -6,11 +6,12 @@ TagManager:
   tags:
   - SpotLight_Menu
   - RaySprite_Menu
+  - Porta
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Cloud
+  - Ground
   - Water
   - UI
   - Building
@@ -66,4 +67,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 406907889
+    locked: 0
+  - name: Canvas
+    uniqueID: 2134547007
     locked: 0
