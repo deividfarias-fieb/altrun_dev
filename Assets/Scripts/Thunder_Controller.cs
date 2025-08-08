@@ -146,7 +146,7 @@ public class Thunder_Controller : MonoBehaviour
         if (audioSource != null && thunderSoundClip != null)
         {
             audioSource.PlayOneShot(thunderSoundClip); // Toca o som do trovão
-            Debug.Log("Som de trovão tocado!");
+            //Debug.Log("Som de trovão tocado!");
         }
         else
         {

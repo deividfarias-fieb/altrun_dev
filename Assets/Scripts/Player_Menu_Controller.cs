@@ -76,10 +76,10 @@ public class Player_Menu_Controller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("OnTriggerEnter2D chamado! Objeto colidido: " + other.gameObject.name + " (Tag: " + other.tag + ")");
+        //Debug.Log("OnTriggerEnter2D chamado! Objeto colidido: " + other.gameObject.name + " (Tag: " + other.tag + ")");
         if (other.gameObject.CompareTag("Button"))
         {
-            Debug.Log("Colisao com coletavel detectada!");
+            //Debug.Log("Colisao com coletavel detectada!");
             if (interactionText != null)
             {
                 interactionText.gameObject.SetActive(true);
@@ -94,7 +94,7 @@ public class Player_Menu_Controller : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Button"))
         {
-            Debug.Log("Saiu da colisao com coletavel.");
+            //Debug.Log("Saiu da colisao com coletavel.");
             if (interactionText != null)
             {
                 interactionText.gameObject.SetActive(false);
