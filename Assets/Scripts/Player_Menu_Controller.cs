@@ -4,11 +4,12 @@ using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class Player_Menu_Controller : MonoBehaviour
 {
     // Mover o player em ambas as direcoes
-    [SerializeField] private SliderJoint2D sliderPlayer; //O [SerializeField] ajuda a otimizar o jogo e cumpre a mesma fun��o que o public
+    [SerializeField] private SliderJoint2D sliderPlayer; //O [SerializeField] ajuda a otimizar o jogo e cumpre a mesma funcao que o public
     [SerializeField] private JointMotor2D motorTranslation;
     [SerializeField] private Animator anim;
     [SerializeField] private JointTranslationLimits2D newLimits = new JointTranslationLimits2D();
@@ -17,7 +18,7 @@ public class Player_Menu_Controller : MonoBehaviour
     private bool isMovingRight = true; 
     private bool isPaused = false;
 
-    [SerializeField] private TextMeshProUGUI interactionText;
+    [SerializeField] private Button interactionButton;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +27,9 @@ public class Player_Menu_Controller : MonoBehaviour
         oldLimits = sliderPlayer.limits;
         StartCoroutine(MovePlayer());
 
-        if (interactionText != null)
+        if (interactionButton != null)
         {
-            interactionText.gameObject.SetActive(false);
+            interactionButton.gameObject.SetActive(false);
         }
     }
 
@@ -80,9 +81,9 @@ public class Player_Menu_Controller : MonoBehaviour
         if (other.gameObject.CompareTag("Button"))
         {
             //Debug.Log("Colisao com coletavel detectada!");
-            if (interactionText != null)
+            if (interactionButton != null)
             {
-                interactionText.gameObject.SetActive(true);
+                interactionButton.gameObject.SetActive(true);
                 //interactionText.text = "Pressione E para interagir!";
             }
             // Opcional: Destroi o objeto colidido
@@ -95,9 +96,9 @@ public class Player_Menu_Controller : MonoBehaviour
         if (other.gameObject.CompareTag("Button"))
         {
             //Debug.Log("Saiu da colisao com coletavel.");
-            if (interactionText != null)
+            if (interactionButton != null)
             {
-                interactionText.gameObject.SetActive(false);
+                interactionButton.gameObject.SetActive(false);
             }
         }
     }

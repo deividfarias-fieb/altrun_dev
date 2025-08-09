@@ -46,7 +46,7 @@ public class Options_Controller : MonoBehaviour
         }
         else
         {
-            // Se não, assume o valor padrão, por exemplo, 1
+            // Se nï¿½o, assume o valor padrï¿½o, por exemplo, 1
             effectVolumeSlider.value = 1f;
         }
     }
