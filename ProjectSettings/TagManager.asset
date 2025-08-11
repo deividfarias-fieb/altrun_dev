@@ -11,6 +11,7 @@ TagManager:
   - Lantern_Left
   - Button
   - Porta
+  - Mouse_Egg
   layers:
   - Default
   - TransparentFX

@@ -2,13 +2,13 @@
 - Project name: altrun_dev
 - Unity version: Unity 2022.3.52f1
 - Active scene:
-  - Name: cena_menu
+  - Name: MenuPrincipal
   - Tags:
-    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpotLight_Menu, RaySprite_Menu, Lantern_Light, Lantern_Right, Lantern_Left, Button
+    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpotLight_Menu, RaySprite_Menu, Lantern_Light, Lantern_Right, Lantern_Left, Button, Porta
   - Layers:
-    - Default, TransparentFX, Ignore Raycast, Cloud, Water, UI, Building
+    - Default, TransparentFX, Ignore Raycast, Ground, Water, UI, Building
 - Active game object:
-  - Name: Player_With_Lantern
+  - Name: Panel_Options
   - Tag: Untagged
-  - Layer: Default
+  - Layer: UI
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
