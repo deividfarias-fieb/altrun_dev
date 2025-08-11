@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/cena_menu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/teste_one.unity
     guid: afdb06068889b2f4a86b28a5e9f5ce7a
+  - enabled: 1
+    path: Assets/Scenes/Cutscene.unity
+    guid: 7bb23d9118e5bce4ca87b8b9f116e243
+  - enabled: 1
+    path: Assets/Scenes/Fase2.unity
+    guid: 5ae268322b0e77446b357e2edad9dcc3
   m_configObjects: {}
