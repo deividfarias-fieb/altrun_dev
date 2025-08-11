@@ -16,7 +16,7 @@ public class Thunder_Controller : MonoBehaviour
     private string lightTag = "SpotLight_Menu"; // Tag das Spotlights
     private float flashIntensity = 1.5f; // Intensidade das luzes
     private float flashDuration = 0.50f; // Duracao da transicao de cada luz
-    private float delayBetweenLights = 0.25f; // Atrasa a mudanca de cada luz
+    private float delayBetweenLights = 0.125f; // Atrasa a mudanca de cada luz
 
     // --- Configuracoes das Sprites ---
     private string spriteTag = "RaySprite_Menu";
@@ -122,7 +122,15 @@ public class Thunder_Controller : MonoBehaviour
 
             if (currentLight != null)
             {
-                StartCoroutine(FlashLightSprite(currentLight, currentSprite, flashIntensity, flashDuration));
+                currentSprite.enabled = currentSprite != null ? true : false;
+                currentLight.intensity = flashIntensity;
+
+                yield return new WaitForSeconds(delayBetweenLights);
+
+                currentLight.intensity = 0f;
+                currentSprite.enabled = currentSprite != null ? false : true;
+
+                /*StartCoroutine(FlashLightSprite(currentLight, currentSprite, flashIntensity, flashDuration));
                 if (i > 0)
                 {
                     Light2D previousLight = thunderLights[i - 1];
@@ -130,9 +138,11 @@ public class Thunder_Controller : MonoBehaviour
                     StartCoroutine(TurnOff(previousLight, previousSprite, delayBetweenLights));
                 }
 
-                yield return new WaitForSeconds(delayBetweenLights);
+                yield return new WaitForSeconds(delayBetweenLights); */
             }
         }
+
+        /*
 
         if (thunderLights.Length > 0 && thunderLights[thunderLights.Length - 1] != null)
         {
@@ -144,8 +154,10 @@ public class Thunder_Controller : MonoBehaviour
             }
         }
 
-        // --- NOVO: Atraso para o som do trovão e toca o som ---
-        yield return new WaitForSeconds(2f); // Espera 3 segundos após a última luz ser apagada
+        */
+
+        // --- Atraso para o som do trovão e toca o som ---
+        yield return new WaitForSeconds(1f); // Espera 3 segundos após a última luz ser apagada
 
         musicVolumeOld = musicSource.volume;
         if (thunderSource != null && thunderSoundClip != null)
