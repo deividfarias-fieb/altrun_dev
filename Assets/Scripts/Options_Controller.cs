@@ -16,6 +16,7 @@ public class Options_Controller : MonoBehaviour
     [SerializeField] private Toggle fullScreenToggle;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Slider effectVolumeSlider;
+    [SerializeField] private Slider generalVolumeSlider;
 
     [SerializeField] private Resolution[] resolutions;
 
@@ -30,6 +31,7 @@ public class Options_Controller : MonoBehaviour
         fullScreenToggle.onValueChanged.AddListener(delegate { OnFullScreenToggle(); });
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionChange(); });
         effectVolumeSlider.onValueChanged.AddListener(delegate { OnEffectsVolumeChange(); });
+        generalVolumeSlider.onValueChanged.AddListener(delegate { OnGeneralVolumeChange(); });
     }
     void Start()
     {
@@ -40,15 +42,8 @@ public class Options_Controller : MonoBehaviour
 
         fullScreenToggle.isOn = Screen.fullScreen;
 
-        if (masterMixer.GetFloat("SFXVolume", out float volume))
-        {
-            effectVolumeSlider.value = Mathf.Pow(10, volume / 20);
-        }
-        else
-        {
-            // Se n�o, assume o valor padr�o, por exemplo, 1
-            effectVolumeSlider.value = 1f;
-        }
+        effectVolumeSlider.value = masterMixer.GetFloat("SFXVolume", out float sfx) ? Mathf.Pow(10, sfx / 20) : 1f;
+        generalVolumeSlider.value = masterMixer.GetFloat("Master", out float general) ? Mathf.Pow(10, general / 20) : 1f;
     }
 
     void InitializeResolutions()
@@ -76,12 +71,6 @@ public class Options_Controller : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnFullScreenToggle()
     {
         Screen.fullScreen = fullScreenToggle.isOn;
@@ -96,5 +85,10 @@ public class Options_Controller : MonoBehaviour
     public void OnEffectsVolumeChange()
     {
         masterMixer.SetFloat("SFXVolume", Mathf.Log10(effectVolumeSlider.value) * 20);
+    }
+
+    public void OnGeneralVolumeChange()
+    {
+        masterMixer.SetFloat("Master", Mathf.Log10(effectVolumeSlider.value) * 20);
     }
 }

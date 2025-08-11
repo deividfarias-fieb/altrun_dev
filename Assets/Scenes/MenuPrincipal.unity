@@ -7744,6 +7744,7 @@ MonoBehaviour:
   fullScreenToggle: {fileID: 1679302459}
   resolutionDropdown: {fileID: 1425771530}
   effectVolumeSlider: {fileID: 1564620947}
+  generalVolumeSlider: {fileID: 1533263585}
 --- !u!1 &1109763898
 GameObject:
   m_ObjectHideFlags: 0
@@ -14984,7 +14985,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1107029426}
+        m_TargetAssemblyTypeName: Options_Controller, Assembly-CSharp
+        m_MethodName: OnGeneralVolumeChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1538287176
 GameObject:
   m_ObjectHideFlags: 0
@@ -15225,7 +15238,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1107029426}
         m_TargetAssemblyTypeName: Options_Controller, Assembly-CSharp
         m_MethodName: OnEffectsVolumeChange
         m_Mode: 1
