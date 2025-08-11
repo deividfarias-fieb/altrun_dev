@@ -17,6 +17,7 @@ public class Options_Controller : MonoBehaviour
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Slider effectVolumeSlider;
     [SerializeField] private Slider generalVolumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
 
     [SerializeField] private Resolution[] resolutions;
 
@@ -32,6 +33,7 @@ public class Options_Controller : MonoBehaviour
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionChange(); });
         effectVolumeSlider.onValueChanged.AddListener(delegate { OnEffectsVolumeChange(); });
         generalVolumeSlider.onValueChanged.AddListener(delegate { OnGeneralVolumeChange(); });
+        musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChange(); });
     }
     void Start()
     {
@@ -44,6 +46,7 @@ public class Options_Controller : MonoBehaviour
 
         effectVolumeSlider.value = masterMixer.GetFloat("SFXVolume", out float sfx) ? Mathf.Pow(10, sfx / 20) : 1f;
         generalVolumeSlider.value = masterMixer.GetFloat("Master", out float general) ? Mathf.Pow(10, general / 20) : 1f;
+        generalVolumeSlider.value = masterMixer.GetFloat("Music", out float music) ? Mathf.Pow(10, music / 20) : 1f;
     }
 
     void InitializeResolutions()
@@ -89,6 +92,10 @@ public class Options_Controller : MonoBehaviour
 
     public void OnGeneralVolumeChange()
     {
-        masterMixer.SetFloat("Master", Mathf.Log10(effectVolumeSlider.value) * 20);
+        masterMixer.SetFloat("Master", Mathf.Log10(generalVolumeSlider.value) * 20);
+    }
+    public void OnMusicVolumeChange()
+    {
+        masterMixer.SetFloat("Music", Mathf.Log10(musicVolumeSlider.value) * 20);
     }
 }

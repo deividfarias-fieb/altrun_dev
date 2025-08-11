@@ -8,8 +8,9 @@ using System.Text.RegularExpressions;
 public class Thunder_Controller : MonoBehaviour
 {
     // --- Configuracoes de audio ---
-    public AudioClip thunderSoundClip; 
-    private AudioSource audioSource;
+    [SerializeField] private AudioClip thunderSoundClip; 
+    [SerializeField] private AudioSource thunderSource;
+    [SerializeField] private AudioSource musicSource;
 
     // --- Configuracoes de Luzes ---
     private string lightTag = "SpotLight_Menu"; // Tag das Spotlights
@@ -29,14 +30,17 @@ public class Thunder_Controller : MonoBehaviour
     private SpriteRenderer[] raySprites;
     private float nextSequenceTime;
     private bool sequenceRunning = false;
+    private float musicVolumeOld;
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
+        //thunderSource = GetComponent<AudioSource>();
+        //musicSource = GetComponent<AudioSource>();
+        if (thunderSource == null && musicSource == null)
         {
             Debug.LogWarning("AudioSource component not found on this GameObject. Thunder sound will not play.");
         }
+
         // Encontra todos os objetos com a tag especificada
         GameObject[] lightObjects = GameObject.FindGameObjectsWithTag(lightTag);
         if (lightObjects.Length > 0)
@@ -143,14 +147,18 @@ public class Thunder_Controller : MonoBehaviour
         // --- NOVO: Atraso para o som do trovão e toca o som ---
         yield return new WaitForSeconds(2f); // Espera 3 segundos após a última luz ser apagada
 
-        if (audioSource != null && thunderSoundClip != null)
+        musicVolumeOld = musicSource.volume;
+        if (thunderSource != null && thunderSoundClip != null)
         {
-            audioSource.PlayOneShot(thunderSoundClip); // Toca o som do trovão
+            musicSource.volume = musicVolumeOld * 0.4f;
+            thunderSource.PlayOneShot(thunderSoundClip); // Toca o som do trovão
+            yield return new WaitForSeconds(2f);
+            musicSource.volume = musicVolumeOld;
             //Debug.Log("Som de trovão tocado!");
         }
         else
         {
-            if (audioSource == null) Debug.LogWarning("AudioSource não encontrado para tocar o som do trovão.");
+            if (thunderSource == null) Debug.LogWarning("AudioSource não encontrado para tocar o som do trovão.");
             if (thunderSoundClip == null) Debug.LogWarning("AudioClip do trovão não atribuído no Inspetor.");
         }
 
