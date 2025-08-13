@@ -76,6 +76,18 @@ TagManager:
   - name: Player
     uniqueID: 406907889
     locked: 0
+  - name: buracofresco
+    uniqueID: 2268541735
+    locked: 0
+  - name: Spr_Canvas
+    uniqueID: 1267818939
+    locked: 0
   - name: Canvas
     uniqueID: 2134547007
+    locked: 0
+  - name: alavanca
+    uniqueID: 2265402343
+    locked: 0
+  - name: Portafresca
+    uniqueID: 2607958863
     locked: 0

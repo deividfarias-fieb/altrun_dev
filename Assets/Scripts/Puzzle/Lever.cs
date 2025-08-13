@@ -1,35 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Lever : MonoBehaviour
 {
-  public bool IsUp = false;
-  public Sprite upSprite;
-  public Sprite downSprite;
+    public bool isUp = false; // estado da alavanca
+    public Sprite upSprite;
+    public Sprite downSprite;
 
-  private SpriteRenderer sr;
-  private PuzzleManager puzzleManager;
+    private SpriteRenderer sr;
+    private PuzzleManager puzzleManager;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         puzzleManager = FindObjectOfType<PuzzleManager>();
-        UpdateSprite();      
+        UpdateSprite();
     }
 
-    void OnTriggerStay2D(Collider2D other){
-        if(other.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
-        {
-            IsUp = !IsUp;
-
-            UpdateSprite();
-            puzzleManager.CheckLevers();
-        }
+    void OnMouseDown()
+    {
+        // Esse método é chamado automaticamente ao clicar no Collider do objeto
+        isUp = !isUp;
+        UpdateSprite();
+        puzzleManager.CheckLevers();
     }
 
-   void UpdateSprite()
-   {
-    sr.sprite = IsUp ? upSprite : downSprite;
-   }
+    void UpdateSprite()
+    {
+        sr.sprite = isUp ? upSprite : downSprite;
+    }
 }
